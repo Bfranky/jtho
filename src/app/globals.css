@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --navy:      #0A1628;
+  --blue:      #1B3A6B;
+  --sky:       #2E6BB0;
+  --teal:      #1A7F6E;
+  --mint:      #D4EDE8;
+  --gold:      #C8963E;
+  --cream:     #FAF8F4;
+  --white:     #FFFFFF;
+  --gray:      #6B7280;
+  --light:     #F0F4FA;
+  --border:    #DDE4EF;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--white);
+  color: var(--navy);
+  overflow-x: hidden;
+}
+
+.serif      { font-family: 'DM Serif Display', serif; }
+.baskerville{ font-family: 'Libre Baskerville', serif; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar       { width: 5px; }
+::-webkit-scrollbar-track { background: var(--light); }
+::-webkit-scrollbar-thumb { background: var(--sky); border-radius: 3px; }
+
+/* ── Animations ── */
+@keyframes fadeUp    { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn    { from{opacity:0} to{opacity:1} }
+@keyframes fadeLeft  { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
+@keyframes pulse     { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+@keyframes float     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes shimmer   { 0%{background-position:-200% center} 100%{background-position:200% center} }
+@keyframes crossRotate { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(15deg)} }
+@keyframes drawLine  { from{width:0} to{width:100%} }
+
+/* ── Buttons ── */
+.btn-primary {
+  background:    var(--sky);
+  color:         var(--white);
+  border:        none;
+  padding:       14px 36px;
+  font-family:   'DM Sans', sans-serif;
+  font-weight:   600;
+  font-size:     14px;
+  letter-spacing:0.5px;
+  cursor:        pointer;
+  border-radius: 4px;
+  transition:    all 0.3s ease;
+  position:      relative;
+  overflow:      hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+.btn-primary:hover::after { transform: translateX(100%); }
+.btn-primary:hover { background: var(--blue); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(46,107,176,0.35); }
+
+.btn-outline {
+  background:    transparent;
+  color:         var(--sky);
+  border:        2px solid var(--sky);
+  padding:       12px 34px;
+  font-family:   'DM Sans', sans-serif;
+  font-weight:   600;
+  font-size:     14px;
+  cursor:        pointer;
+  border-radius: 4px;
+  transition:    all 0.3s ease;
+}
+.btn-outline:hover { background: var(--sky); color: var(--white); transform: translateY(-2px); }
+
+.btn-teal {
+  background:    var(--teal);
+  color:         var(--white);
+  border:        none;
+  padding:       14px 36px;
+  font-family:   'DM Sans', sans-serif;
+  font-weight:   600;
+  font-size:     14px;
+  cursor:        pointer;
+  border-radius: 4px;
+  transition:    all 0.3s ease;
+}
+.btn-teal:hover { background: #15695a; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,127,110,0.3); }
+
+/* ── Section label ── */
+.section-label {
+  display:        inline-flex;
+  align-items:    center;
+  gap:            10px;
+  color:          var(--teal);
+  font-size:      11px;
+  font-weight:    600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom:  14px;
+}
+.section-label::before {
+  content: '';
+  display: block;
+  width: 24px; height: 2px;
+  background: var(--teal);
+}
+
+/* ── Card ── */
+.card {
+  background:    var(--white);
+  border:        1px solid var(--border);
+  border-radius: 8px;
+  transition:    all 0.3s ease;
+}
+.card:hover {
+  border-color: var(--sky);
+  transform:    translateY(-4px);
+  box-shadow:   0 16px 40px rgba(10,22,40,0.1);
+}
+
+/* ── Cross icon ── */
+.cross-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.cross-icon::before,
+.cross-icon::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+  border-radius: 2px;
+}
+.cross-icon::before { width: 3px; height: 100%; }
+.cross-icon::after  { width: 100%; height: 3px; }
+
+input, select, textarea { font-family: 'DM Sans', sans-serif; }
