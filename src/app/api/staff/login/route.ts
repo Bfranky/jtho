@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { setSessionCookie } from '@/lib/auth';
 import crypto from 'crypto';
 
 // Simple native SHA-256 password hashing helper
@@ -54,6 +55,13 @@ export async function POST(req: NextRequest) {
     if (user.role !== 'STAFF' && user.role !== 'ADMIN') {
       return NextResponse.json({ success: false, error: 'Access denied: not a registered staff member' }, { status: 403 });
     }
+
+    // Set JWT session cookie
+    await setSessionCookie({
+      userId: user.id,
+      email: user.email,
+      role: user.role
+    });
 
     return NextResponse.json({
       success: true,

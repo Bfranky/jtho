@@ -6,6 +6,7 @@ const NAV = [
   { label: 'Home',          href: '/' },
   { label: 'Services',      href: '/services' },
   { label: 'Doctors',       href: '/doctors' },
+  { label: 'Blog',          href: '/blog' },
   { label: 'Appointments',  href: '/appointments' },
   { label: 'Emergency',     href: '/emergency' },
   { label: 'Patient Portal',href: '/portal' },

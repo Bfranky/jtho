@@ -1,7 +1,22 @@
 import Link from 'next/link';
 
-const SERVICES = ['Bone Fracture Treatment','Joint Replacement','Spine Care','Physiotherapy','Sports Injury','Paediatric Orthopaedics'];
-const LINKS    = [{ l:'Home',href:'/'},{l:'Services',href:'/services'},{l:'Doctors',href:'/doctors'},{l:'Appointments',href:'/appointments'},{l:'Emergency',href:'/emergency'},{l:'Contact',href:'/contact'}];
+const SERVICES = [
+  'Orthopaedics & Joint Care',
+  'Massaging (Hand & Machine)',
+  'Physiotherapy',
+  'Bone Fractures & Spinal Cord',
+  'Arthritis Management',
+  'Rheumatism Treatment'
+];
+const LINKS    = [
+  { l:'Home',href:'/'},
+  { l:'Services',href:'/services'},
+  { l:'Doctors',href:'/doctors'},
+  { l:'Blog',href:'/blog'},
+  { l:'Appointments',href:'/appointments'},
+  { l:'Emergency',href:'/emergency'},
+  { l:'Contact',href:'/contact'}
+];
 
 export default function Footer() {
   return (
