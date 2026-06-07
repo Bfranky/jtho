@@ -11,29 +11,15 @@ const SERVICES = [
 const LINKS    = [
   { l:'Home',href:'/'},
   { l:'Services',href:'/services'},
-  { l:'Doctors',href:'/doctors'},
   { l:'Blog',href:'/blog'},
   { l:'Appointments',href:'/appointments'},
-  { l:'Emergency',href:'/emergency'},
   { l:'Contact',href:'/contact'}
 ];
 
 export default function Footer() {
   return (
     <footer>
-      {/* Emergency strip */}
-      <div className="emergency-strip">
-        <div>
-          <div style={{ fontFamily:'DM Serif Display,serif', fontSize: 20, marginBottom: 4 }}>🚨 Medical Emergency?</div>
-          <div style={{ fontSize: 13, opacity: .8 }}>We are here. Call immediately — our team responds fast.</div>
-        </div>
-        <div style={{ display:'flex', gap:12, flexWrap:'wrap' }}>
-          <a href="tel:08023758036" className="btn btn-outline-white btn-sm">📞 0802 375 8036</a>
-          <Link href="/emergency" className="btn" style={{ background:'#fff', color:'var(--red)', fontWeight:700, fontSize:13, padding:'8px 18px', borderRadius:6 }}>Emergency Page</Link>
-        </div>
-      </div>
 
-      {/* Body */}
       <div style={{ background:'var(--navy)', padding:'60px 40px 28px' }}>
         <div style={{ maxWidth:1200, margin:'0 auto' }}>
           <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', gap:48, marginBottom:48 }}>

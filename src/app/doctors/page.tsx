@@ -35,59 +35,8 @@ export default function DoctorsPage() {
       const json = await res.json();
       if (json.success && json.data.length > 0) {
         setStaffList(json.data);
-      } else {
-        // Fallback placeholder data if database is empty on first load
-        setStaffList([
-          {
-            id: 'f1',
-            firstName: 'Adebayo',
-            lastName: 'Olusola',
-            role: 'DOCTOR',
-            specialty: 'Orthopaedics & Joint Care',
-            qualifications: 'MBBS, FRCS (Ortho)',
-            experience: 18,
-            bio: 'Dr. Olusola is our chief orthopaedic physician with 18 years of clinical experience in bone fractures, joint health, and complex musculoskeletal care.',
-            imageUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=400&q=80',
-            availableDays: ['Monday', 'Wednesday', 'Friday']
-          },
-          {
-            id: 'f2',
-            firstName: 'Funmilayo',
-            lastName: 'Oke',
-            role: 'PHYSIOTHERAPIST',
-            specialty: 'Rehabilitation & Rheumatism Relief',
-            qualifications: 'BPT, MPT (Ortho)',
-            experience: 11,
-            bio: 'Mrs. Oke leads our physiotherapy visits, conducting manual mobilization, chronic pain relief, and motor rehabilitation in-clinic and at home.',
-            imageUrl: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=400&q=80',
-            availableDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-          },
-          {
-            id: 'f3',
-            firstName: 'Ngozi',
-            lastName: 'Anyanwu',
-            role: 'DOCTOR',
-            specialty: 'Bone Fractures & Spinal Cord Rehab',
-            qualifications: 'MBBS, MWACS (Ortho)',
-            experience: 12,
-            bio: 'Dr. Anyanwu specializes in spinal cord trauma rehabilitation, developmental bone disorders, and structural orthopedic setting.',
-            imageUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&q=80',
-            availableDays: ['Tuesday', 'Thursday', 'Saturday']
-          },
-          {
-            id: 'f4',
-            firstName: 'Taiwo',
-            lastName: 'Adeyemi',
-            role: 'PHARMACIST',
-            specialty: 'Clinical Medication & Arthritis Care',
-            qualifications: 'B.Pharm, RPh',
-            experience: 9,
-            bio: 'Pharm. Adeyemi reviews pharmacologic therapies, providing counseling on medications for chronic arthritis, joint pain, and rheumatism.',
-            imageUrl: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=400&q=80',
-            availableDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-          }
-        ]);
       }
+      // If empty, staffList stays [] and we show the register CTA below
     } catch (err) {
       console.error('Error fetching staff:', err);
     } finally {
@@ -171,8 +120,26 @@ export default function DoctorsPage() {
           
           {loading ? (
             <div style={{ textAlign: 'center', padding: '80px', color: 'var(--muted)', fontSize: 16 }}>Loading our clinical specialists...</div>
+          ) : staffList.length === 0 ? (
+            /* No doctors at all — prompt registration */
+            <div style={{ textAlign: 'center', padding: '80px 20px' }}>
+              <div style={{ display: 'inline-block', background: '#fff', border: '1px dashed var(--border)', borderRadius: 16, padding: '60px 48px', maxWidth: 520 }}>
+                <div style={{ fontSize: 56, marginBottom: 20 }}>🏥</div>
+                <h2 className="serif" style={{ color: 'var(--navy)', fontSize: 28, marginBottom: 12 }}>No Doctors Registered Yet</h2>
+                <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.8, marginBottom: 28 }}>
+                  Our doctors section is powered by real registered clinicians.<br />
+                  Are you a specialist at Jesus The Healer Orthopaedic Home?<br />
+                  <strong>Register via the Staff Portal</strong> to appear here.
+                </p>
+                <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <Link href="/staff" className="btn btn-primary">Register as a Doctor</Link>
+                  <Link href="/appointments" className="btn btn-outline">Book Appointment</Link>
+                </div>
+              </div>
+            </div>
           ) : filtered.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '80px', color: 'var(--muted)', fontSize: 16 }}>No clinical staff found matching your criteria.</div>
+
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 24 }}>
               {filtered.map(d => (

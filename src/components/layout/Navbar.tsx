@@ -3,15 +3,12 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const NAV = [
-  { label: 'Home',          href: '/' },
-  { label: 'Services',      href: '/services' },
-  { label: 'Doctors',       href: '/doctors' },
-  { label: 'Blog',          href: '/blog' },
-  { label: 'Appointments',  href: '/appointments' },
-  { label: 'Emergency',     href: '/emergency' },
-  { label: 'Patient Portal',href: '/portal' },
-  { label: 'Staff Portal',  href: '/staff' },
-  { label: 'Contact',       href: '/contact' },
+  { label: 'Home',           href: '/' },
+  { label: 'Services',       href: '/services' },
+  { label: 'Blog',           href: '/blog' },
+  { label: 'Appointments',   href: '/appointments' },
+  { label: 'Patient Portal', href: '/portal' },
+  { label: 'Contact',        href: '/contact' },
 ];
 
 export default function Navbar() {
@@ -62,7 +59,6 @@ export default function Navbar() {
           {/* Right buttons */}
           <div className="hide-mobile" style={{ display: 'flex', gap: 10 }}>
             <Link href="/appointments" className="btn btn-primary btn-sm">Book Appointment</Link>
-            <Link href="/emergency" className="btn btn-red btn-sm">🚨 Emergency</Link>
           </div>
 
           {/* Hamburger */}
@@ -80,7 +76,6 @@ export default function Navbar() {
           ))}
           <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
             <Link href="/appointments" className="btn btn-primary btn-sm" onClick={() => setOpen(false)}>Book Appointment</Link>
-            <Link href="/emergency" className="btn btn-red btn-sm" onClick={() => setOpen(false)}>🚨 Emergency</Link>
           </div>
         </div>
       )}

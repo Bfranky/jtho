@@ -1,17 +1,30 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import WhatsApp from '@/components/layout/WhatsApp';
 
-const DEPARTMENTS  = ['Orthopaedics','Physiotherapy','Spine & Neurology','Paediatric Orthopaedics','General Medical','Pharmacy / Drug Therapy'];
-const DOCTORS_LIST = [
-  { id:'d1', name:'Dr. Adebayo Olusola',  dept:'Orthopaedics', slots:['09:00 AM','11:00 AM','02:00 PM','04:00 PM'] },
-  { id:'d2', name:'Dr. Ngozi Anyanwu',    dept:'Spine & Neurology', slots:['09:30 AM','11:30 AM','02:30 PM'] },
-  { id:'d3', name:'Mrs. Funmilayo Oke',   dept:'Physiotherapy', slots:['08:00 AM','10:00 AM','12:00 PM','02:00 PM'] },
-  { id:'d4', name:'Pharm. Taiwo Adeyemi', dept:'Pharmacy / Drug Therapy', slots:['09:00 AM','11:00 AM','01:00 PM'] },
+// Departments focused on the hospital's bone & spinal cord specialisation
+const DEPARTMENTS = [
+  'Orthopaedic Surgery',
+  'Spinal Cord & Neurosurgery',
+  'Bone Fracture & Trauma',
+  'Spinal Rehabilitation',
+  'Paediatric Orthopaedics',
+  'Physiotherapy & Rehab',
+  'Joint Replacement',
+  'Bone Tumour & Oncology',
 ];
+
+const DEFAULT_SLOTS = ['08:00 AM','09:00 AM','10:00 AM','11:00 AM','12:00 PM','02:00 PM','03:00 PM','04:00 PM'];
+
+interface RegisteredDoctor {
+  id: string;
+  name: string;
+  dept: string;
+  slots: string[];
+}
 
 interface BookingData {
   department: string; doctorId: string; date: string; time: string;
@@ -25,12 +38,34 @@ export default function AppointmentsPage() {
   const [data, setData] = useState<BookingData>({ department:'', doctorId:'', date:'', time:'', firstName:'', lastName:'', phone:'', email:'', dob:'', gender:'', notes:'' });
   const [done, setDone] = useState(false);
   const [ref,  setRef]  = useState('');
+  const [doctorsList, setDoctorsList] = useState<RegisteredDoctor[]>([]);
+  const [loadingDoctors, setLoadingDoctors] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/staff')
+      .then(r => r.json())
+      .then(json => {
+        if (json.success && json.data?.length > 0) {
+          const mapped: RegisteredDoctor[] = json.data
+            .filter((s: { role: string }) => s.role === 'DOCTOR' || s.role === 'PHYSIOTHERAPIST')
+            .map((s: { id: string; firstName: string; lastName: string; role: string; specialty: string | null }) => ({
+              id: s.id,
+              name: `${s.role === 'DOCTOR' ? 'Dr.' : 'Mrs.'} ${s.firstName} ${s.lastName}`,
+              dept: s.specialty || 'Orthopaedic Surgery',
+              slots: DEFAULT_SLOTS,
+            }));
+          setDoctorsList(mapped);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoadingDoctors(false));
+  }, []);
 
   const set = (k: keyof BookingData) => (e: React.ChangeEvent<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>) =>
     setData(d => ({ ...d, [k]: e.target.value }));
 
-  const filteredDoctors = DOCTORS_LIST.filter(d => !data.department || d.dept === data.department);
-  const selectedDoctor  = DOCTORS_LIST.find(d => d.id === data.doctorId);
+  const filteredDoctors = doctorsList.filter(d => !data.department || d.dept === data.department);
+  const selectedDoctor  = doctorsList.find(d => d.id === data.doctorId);
 
   const confirm = async () => {
     const newRef = `APT-${Date.now().toString().slice(-8)}`;
@@ -133,26 +168,40 @@ export default function AppointmentsPage() {
                 <h3 className="serif" style={{ color: 'var(--navy)', fontSize: 26, marginBottom: 8 }}>Choose Doctor & Time</h3>
                 <p style={{ color: 'var(--muted)', fontSize: 14, marginBottom: 28 }}>Select your preferred doctor and appointment slot.</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24 }}>
-                  {filteredDoctors.map(doc => (
-                    <div key={doc.id} onClick={() => setData(d => ({ ...d, doctorId: doc.id, time: '' }))}
-                      style={{ padding: '16px 18px', border: `2px solid ${data.doctorId === doc.id ? 'var(--sky)' : 'var(--border)'}`, borderRadius: 8, cursor: 'pointer', background: data.doctorId === doc.id ? 'rgba(37,99,235,.04)' : '#fff', transition: 'all .2s' }}>
-                      <div style={{ fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{doc.name}</div>
-                      <div style={{ color: 'var(--muted)', fontSize: 12, marginBottom: data.doctorId === doc.id ? 14 : 0 }}>{doc.dept}</div>
-                      {data.doctorId === doc.id && (
-                        <div>
-                          <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--sky)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Available Slots</div>
-                          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                            {doc.slots.map(slot => (
-                              <button key={slot} onClick={e => { e.stopPropagation(); setData(d => ({ ...d, time: slot })); }}
-                                style={{ padding: '6px 14px', borderRadius: 6, border: `1.5px solid ${data.time === slot ? 'var(--sky)' : 'var(--border)'}`, background: data.time === slot ? 'var(--sky)' : '#fff', color: data.time === slot ? '#fff' : 'var(--navy)', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
-                                {slot}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+                  {loadingDoctors ? (
+                    <div style={{ textAlign: 'center', padding: '40px', color: 'var(--muted)', fontSize: 14 }}>Loading available doctors…</div>
+                  ) : filteredDoctors.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '40px 20px', background: 'var(--light)', borderRadius: 10, border: '1px dashed var(--border)' }}>
+                      <div style={{ fontSize: 36, marginBottom: 12 }}>🩺</div>
+                      <div style={{ fontWeight: 700, color: 'var(--navy)', marginBottom: 8 }}>No doctors registered yet</div>
+                      <p style={{ color: 'var(--muted)', fontSize: 13, marginBottom: 16, lineHeight: 1.6 }}>
+                        Doctors for <strong>{data.department}</strong> have not yet registered on the platform.<br />
+                        Please call us directly or check back soon.
+                      </p>
+                      <Link href="/staff" className="btn btn-outline btn-sm">Doctors — Register Here</Link>
                     </div>
-                  ))}
+                  ) : (
+                    filteredDoctors.map(doc => (
+                      <div key={doc.id} onClick={() => setData(d => ({ ...d, doctorId: doc.id, time: '' }))}
+                        style={{ padding: '16px 18px', border: `2px solid ${data.doctorId === doc.id ? 'var(--sky)' : 'var(--border)'}`, borderRadius: 8, cursor: 'pointer', background: data.doctorId === doc.id ? 'rgba(37,99,235,.04)' : '#fff', transition: 'all .2s' }}>
+                        <div style={{ fontWeight: 600, color: 'var(--navy)', marginBottom: 4 }}>{doc.name}</div>
+                        <div style={{ color: 'var(--muted)', fontSize: 12, marginBottom: data.doctorId === doc.id ? 14 : 0 }}>{doc.dept}</div>
+                        {data.doctorId === doc.id && (
+                          <div>
+                            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--sky)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Available Slots</div>
+                            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                              {doc.slots.map(slot => (
+                                <button key={slot} onClick={e => { e.stopPropagation(); setData(d => ({ ...d, time: slot })); }}
+                                  style={{ padding: '6px 14px', borderRadius: 6, border: `1.5px solid ${data.time === slot ? 'var(--sky)' : 'var(--border)'}`, background: data.time === slot ? 'var(--sky)' : '#fff', color: data.time === slot ? '#fff' : 'var(--navy)', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                                  {slot}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  )}
                 </div>
                 <div style={{ marginBottom: 28 }}>
                   <label className="label">Preferred Date</label>
