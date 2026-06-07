@@ -9,6 +9,7 @@ const NAV = [
   { label: 'Appointments',  href: '/appointments' },
   { label: 'Emergency',     href: '/emergency' },
   { label: 'Patient Portal',href: '/portal' },
+  { label: 'Staff Portal',  href: '/staff' },
   { label: 'Contact',       href: '/contact' },
 ];
 
@@ -30,7 +31,7 @@ export default function Navbar() {
           <a href="tel:08023758036" style={{ color: 'rgba(255,255,255,.65)', fontSize: 12, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>📞 0802 375 8036</a>
           <span style={{ color: 'rgba(255,255,255,.65)', fontSize: 12 }}>📍 5 Adebowale St, Ojodu, Lagos</span>
         </div>
-        <span style={{ color: 'rgba(255,255,255,.5)', fontSize: 12 }}>Mon–Sat · 8 AM – 5 PM</span>
+        <span style={{ color: 'rgba(255,255,255,.5)', fontSize: 12 }}>Operates 24hrs · Always Open (24/7)</span>
       </div>
 
       {/* Main nav */}
