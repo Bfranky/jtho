@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { setSessionCookie } from '@/lib/auth';
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest): Promise<Response> {
   try {
     const { credential } = await req.json();
     
@@ -23,6 +23,15 @@ export async function POST(req: NextRequest) {
     const payload = await googleRes.json();
     const email = payload.email;
     const emailVerified = payload.email_verified === 'true' || payload.email_verified === true;
+    
+    // Privacy & Security: Verify that the audience (aud) matches our Google Client ID
+    const clientAudience = payload.aud;
+    const expectedClientId = process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    
+    if (clientAudience !== expectedClientId) {
+      console.error('[Google Auth Error] Audience mismatch:', { clientAudience, expectedClientId });
+      return NextResponse.json({ success: false, error: 'Unauthorized client application' }, { status: 401 });
+    }
     
     if (!email || !emailVerified) {
       return NextResponse.json({ success: false, error: 'Unverified Google account' }, { status: 401 });

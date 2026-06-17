@@ -34,6 +34,8 @@ export default function StaffPortalPage() {
 
   // Login form
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
 
   // Register form
   const [registerForm, setRegisterForm] = useState({
@@ -90,16 +92,34 @@ export default function StaffPortalPage() {
     notes: '',
   });
 
-  // Check localStorage session on mount
+  // Check session on mount (both localStorage and verify with server)
   useEffect(() => {
-    const savedSession = localStorage.getItem('jtho_staff_session');
-    if (savedSession) {
-      try {
-        setSession(JSON.parse(savedSession));
-      } catch (e) {
-        localStorage.removeItem('jtho_staff_session');
+    const checkStaffSession = async () => {
+      const savedSession = localStorage.getItem('jtho_staff_session');
+      if (savedSession) {
+        try {
+          setSession(JSON.parse(savedSession));
+        } catch (e) {
+          localStorage.removeItem('jtho_staff_session');
+        }
       }
-    }
+
+      try {
+        const res = await fetch('/api/auth/session');
+        const json = await res.json();
+        if (json.success && json.session && (json.session.role === 'STAFF' || json.session.role === 'ADMIN')) {
+          setSession(json.session);
+          localStorage.setItem('jtho_staff_session', JSON.stringify(json.session));
+        } else {
+          setSession(null);
+          localStorage.removeItem('jtho_staff_session');
+        }
+      } catch (err) {
+        console.error('[Session verify error]', err);
+      }
+    };
+
+    checkStaffSession();
   }, []);
 
   // Fetch patients when logged in
@@ -116,6 +136,69 @@ export default function StaffPortalPage() {
       fetchNotes(selectedPatient.id);
     }
   }, [selectedPatient]);
+
+  const handleGoogleSignIn = async (response: any) => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: response.credential }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setSession(json.data);
+        localStorage.setItem('jtho_staff_session', JSON.stringify(json.data));
+        flashMessage('Welcome back to your workspace!', 'success');
+      } else {
+        flashMessage(json.error || 'Google login failed', 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      flashMessage('Connection error. Please try again.', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (authMode !== 'login' || session) return;
+
+    const initGoogleSignIn = () => {
+      const google = (window as any).google;
+      if (google) {
+        google.accounts.id.initialize({
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+          callback: handleGoogleSignIn,
+        });
+
+        const btnParent = document.getElementById('google-signin-btn');
+        if (btnParent) {
+          google.accounts.id.renderButton(btnParent, {
+            theme: 'outline',
+            size: 'large',
+            width: btnParent.clientWidth || 360,
+          });
+        }
+      }
+    };
+
+    let script = document.getElementById('google-jssdk') as HTMLScriptElement;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'google-jssdk';
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+      script.onload = () => {
+        initGoogleSignIn();
+      };
+    } else {
+      const timer = setTimeout(initGoogleSignIn, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [authMode, session]);
 
   const flashMessage = (text: string, type: 'success' | 'error') => {
     setMessage({ text, type });
@@ -218,7 +301,12 @@ export default function StaffPortalPage() {
     }
   };
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (err) {
+      console.error(err);
+    }
     localStorage.removeItem('jtho_staff_session');
     setSession(null);
     setSelectedPatient(null);
@@ -518,14 +606,40 @@ export default function StaffPortalPage() {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <label className="label">Secure Password</label>
                       </div>
-                      <input
-                        type="password"
-                        required
-                        className="input"
-                        placeholder="••••••••"
-                        value={loginForm.password}
-                        onChange={(e) => setLoginForm((l) => ({ ...l, password: e.target.value }))}
-                      />
+                      <div style={{ position: 'relative' }}>
+                        <input
+                          type={showLoginPassword ? 'text' : 'password'}
+                          required
+                          className="input"
+                          placeholder="••••••••"
+                          value={loginForm.password}
+                          onChange={(e) => setLoginForm((l) => ({ ...l, password: e.target.value }))}
+                          style={{ paddingRight: '50px' }}
+                          autoComplete="current-password"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowLoginPassword(!showLoginPassword)}
+                          style={{
+                            position: 'absolute',
+                            right: '12px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '16px',
+                            color: 'var(--sky)',
+                            padding: '4px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                          title={showLoginPassword ? 'Hide Password' : 'Show Password'}
+                        >
+                          {showLoginPassword ? '🙈' : '👁️'}
+                        </button>
+                      </div>
                     </div>
 
                     <button
@@ -536,6 +650,23 @@ export default function StaffPortalPage() {
                     >
                       {loading ? 'Authenticating...' : 'Sign In to Portal'}
                     </button>
+
+                    <div style={{ margin: '20px 0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+                      <div style={{ flex: 1, height: 1, background: 'var(--border)' }}></div>
+                      <span style={{ color: 'var(--muted)', fontSize: 12 }}>or</span>
+                      <div style={{ flex: 1, height: 1, background: 'var(--border)' }}></div>
+                    </div>
+
+                    <div 
+                      id="google-signin-btn" 
+                      style={{ 
+                        display: 'flex', 
+                        justifyContent: 'center', 
+                        minHeight: 40,
+                        width: '100%',
+                        marginBottom: 16
+                      }}
+                    ></div>
 
                     <p style={{ textAlign: 'center', color: 'var(--muted)', fontSize: 13, marginTop: 24 }}>
                       New medical staff?{' '}
@@ -667,14 +798,40 @@ export default function StaffPortalPage() {
 
                     <div style={{ marginBottom: 20 }}>
                       <label className="label">Create Password *</label>
-                      <input
-                        type="password"
-                        required
-                        className="input"
-                        placeholder="At least 6 characters"
-                        value={registerForm.password}
-                        onChange={(e) => setRegisterForm((r) => ({ ...r, password: e.target.value }))}
-                      />
+                      <div style={{ position: 'relative' }}>
+                        <input
+                          type={showRegisterPassword ? 'text' : 'password'}
+                          required
+                          className="input"
+                          placeholder="At least 6 characters"
+                          value={registerForm.password}
+                          onChange={(e) => setRegisterForm((r) => ({ ...r, password: e.target.value }))}
+                          style={{ paddingRight: '50px' }}
+                          autoComplete="new-password"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                          style={{
+                            position: 'absolute',
+                            right: '12px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '16px',
+                            color: 'var(--sky)',
+                            padding: '4px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                          title={showRegisterPassword ? 'Hide Password' : 'Show Password'}
+                        >
+                          {showRegisterPassword ? '🙈' : '👁️'}
+                        </button>
+                      </div>
                     </div>
 
                     <button

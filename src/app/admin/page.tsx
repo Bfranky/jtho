@@ -25,6 +25,8 @@ export default function AdminPage() {
   const [creds, setCreds] = useState({ email: '', password: '' });
   const [search, setSearch] = useState('');
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showStaffPassword, setShowStaffPassword] = useState(false);
 
   // Database lists
   const [patients, setPatients] = useState<any[]>([]);
@@ -70,6 +72,73 @@ export default function AdminPage() {
   useEffect(() => {
     if (loggedIn) {
       fetchAllData();
+    }
+  }, [loggedIn]);
+
+  const handleGoogleSignIn = async (response: any) => {
+    setLoadingAuth(true);
+    setErrorMessage(null);
+    try {
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: response.credential })
+      });
+      const json = await res.json();
+      if (json.success) {
+        if (json.data.role === 'ADMIN') {
+          setSession(json.data);
+          setLoggedIn(true);
+        } else {
+          setErrorMessage('Access Denied: Only administrators can access this portal.');
+        }
+      } else {
+        setErrorMessage(json.error || 'Google login failed.');
+      }
+    } catch (err) {
+      console.error('[Google login error]', err);
+      setErrorMessage('Failed to sign in. Please check your connection.');
+    } finally {
+      setLoadingAuth(false);
+    }
+  };
+
+  useEffect(() => {
+    if (loggedIn) return;
+
+    const initGoogleSignIn = () => {
+      const google = (window as any).google;
+      if (google) {
+        google.accounts.id.initialize({
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+          callback: handleGoogleSignIn,
+        });
+
+        const btnParent = document.getElementById('google-signin-btn');
+        if (btnParent) {
+          google.accounts.id.renderButton(btnParent, {
+            theme: 'outline',
+            size: 'large',
+            width: btnParent.clientWidth || 300,
+          });
+        }
+      }
+    };
+
+    let script = document.getElementById('google-jssdk') as HTMLScriptElement;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'google-jssdk';
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+      script.onload = () => {
+        initGoogleSignIn();
+      };
+    } else {
+      const timer = setTimeout(initGoogleSignIn, 100);
+      return () => clearTimeout(timer);
     }
   }, [loggedIn]);
 
@@ -382,11 +451,60 @@ export default function AdminPage() {
           </div>
           <div style={{ marginBottom: 24 }}>
             <label className="label">Password</label>
-            <input className="input" type="password" required placeholder="••••••••" value={creds.password} onChange={e => setCreds(c => ({ ...c, password: e.target.value }))} />
+            <div style={{ position: 'relative' }}>
+              <input 
+                className="input" 
+                type={showLoginPassword ? 'text' : 'password'} 
+                required 
+                placeholder="••••••••" 
+                value={creds.password} 
+                onChange={e => setCreds(c => ({ ...c, password: e.target.value }))} 
+                style={{ paddingRight: '50px' }}
+                autoComplete="current-password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowLoginPassword(!showLoginPassword)}
+                style={{
+                  position: 'absolute',
+                  right: '12px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '16px',
+                  color: 'var(--sky)',
+                  padding: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                title={showLoginPassword ? 'Hide Password' : 'Show Password'}
+              >
+                {showLoginPassword ? '🙈' : '👁️'}
+              </button>
+            </div>
           </div>
-          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: 13 }}>
+          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: 13, marginBottom: 16 }}>
             {loadingAuth ? 'Signing In...' : 'Sign In to Admin'}
           </button>
+          
+          <div style={{ margin: '20px 0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+            <div style={{ flex: 1, height: 1, background: 'var(--border)' }}></div>
+            <span style={{ color: 'var(--muted)', fontSize: 12 }}>or</span>
+            <div style={{ flex: 1, height: 1, background: 'var(--border)' }}></div>
+          </div>
+          
+          <div 
+            id="google-signin-btn" 
+            style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              minHeight: 40,
+              width: '100%'
+            }}
+          ></div>
         </form>
       </div>
     </div>
@@ -943,9 +1061,43 @@ export default function AdminPage() {
                 </div>
                 <div>
                   <label className="label">Password *</label>
-                  <input className="input" type="password" required placeholder="Minimum 6 characters" value={staffForm.password} onChange={e => setStaffForm({ ...staffForm, password: e.target.value })} />
+                  <div style={{ position: 'relative' }}>
+                    <input 
+                      className="input" 
+                      type={showStaffPassword ? 'text' : 'password'} 
+                      required 
+                      placeholder="Minimum 6 characters" 
+                      value={staffForm.password} 
+                      onChange={e => setStaffForm({ ...staffForm, password: e.target.value })} 
+                      style={{ paddingRight: '50px' }}
+                      autoComplete="new-password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowStaffPassword(!showStaffPassword)}
+                      style={{
+                        position: 'absolute',
+                        right: '12px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                        color: 'var(--sky)',
+                        padding: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                      title={showStaffPassword ? 'Hide Password' : 'Show Password'}
+                    >
+                      {showStaffPassword ? '🙈' : '👁️'}
+                    </button>
+                  </div>
                 </div>
               </div>
+              <div id="google-auth-container" style={{ marginBottom: 12 }}></div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
                 <div>
                   <label className="label">Role *</label>
