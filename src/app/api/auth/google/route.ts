@@ -27,7 +27,10 @@ export async function POST(req: NextRequest): Promise<Response> {
     
     // Privacy & Security: Verify that the audience (aud) matches our Google Client ID
     const clientAudience = payload.aud;
-    const expectedClientId = process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '119927695510-6tafvslk7sea63pjc57c16f0hdd1fkmv.apps.googleusercontent.com';
+    const rawClientId = process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    const expectedClientId = (rawClientId && !rawClientId.includes('placeholder'))
+      ? rawClientId
+      : '119927695510-6tafvslk7sea63pjc57c16f0hdd1fkmv.apps.googleusercontent.com';
     
     if (clientAudience !== expectedClientId) {
       console.error('[Google Auth Error] Audience mismatch:', { clientAudience, expectedClientId });

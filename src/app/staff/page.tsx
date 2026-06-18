@@ -168,7 +168,9 @@ export default function StaffPortalPage() {
       const google = (window as any).google;
       if (google) {
         google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '119927695510-6tafvslk7sea63pjc57c16f0hdd1fkmv.apps.googleusercontent.com',
+          client_id: (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && !process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID.includes('placeholder'))
+            ? process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+            : '119927695510-6tafvslk7sea63pjc57c16f0hdd1fkmv.apps.googleusercontent.com',
           callback: handleGoogleSignIn,
         });
 
