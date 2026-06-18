@@ -121,8 +121,8 @@ export async function POST(req: NextRequest): Promise<Response> {
         staffProfile: user.staff
       }
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('[POST /api/auth/google]', error);
-    return NextResponse.json({ success: false, error: 'Google auth system error' }, { status: 500 });
+    return NextResponse.json({ success: false, error: `Google auth system error: ${error.message || error}` }, { status: 500 });
   }
 }
