@@ -33,14 +33,9 @@ export async function GET(req: NextRequest) {
 }
 
 // ── POST /api/staff ───────────────────────────────────────────────
-// Registers a new staff member (creates both User and Staff records). Restricted to ADMIN.
+// Registers a new staff member (creates both User and Staff records). Restricted to ADMIN for ADMIN role creation.
 export async function POST(req: NextRequest) {
   try {
-    const session = await getAuthSession();
-    if (!session || session.role !== 'ADMIN') {
-      return NextResponse.json({ success: false, error: 'Access denied: Administrators only' }, { status: 403 });
-    }
-
     const body = await req.json();
     const {
       email,
@@ -55,6 +50,14 @@ export async function POST(req: NextRequest) {
       bio,
       availableDays
     } = body;
+
+    // Enforce admin check only when attempting to register an ADMIN account
+    if (role === 'ADMIN') {
+      const session = await getAuthSession();
+      if (!session || session.role !== 'ADMIN') {
+        return NextResponse.json({ success: false, error: 'Access denied: Administrators only' }, { status: 403 });
+      }
+    }
 
     // Validation
     if (!email || !password || !firstName || !lastName || !role) {

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { setSessionCookie } from '@/lib/auth';
+import crypto from 'crypto';
 
 export async function POST(req: NextRequest): Promise<Response> {
   try {
@@ -38,16 +39,60 @@ export async function POST(req: NextRequest): Promise<Response> {
     }
     
     // Query database for pre-registered administrator user
-    const user = await db.user.findUnique({
+    let user = await db.user.findUnique({
       where: { email },
       include: { staff: true }
     });
     
     if (!user) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Access denied: This email is not pre-registered in the system' 
-      }, { status: 403 });
+      // Auto-register since this is a sign up / login from Google
+      const isBlessedAdmin = email === 'blessedogobor@gmail.com';
+      const userRole = isBlessedAdmin ? 'ADMIN' : 'STAFF';
+      const staffRole = isBlessedAdmin ? 'ADMIN' : 'DOCTOR';
+      
+      let firstName = payload.given_name || '';
+      let lastName = payload.family_name || '';
+      const imageUrl = payload.picture || null;
+      
+      if (!firstName && !lastName && payload.name) {
+        const parts = payload.name.split(' ');
+        firstName = parts[0] || 'Google';
+        lastName = parts.slice(1).join(' ') || 'User';
+      } else {
+        if (!firstName) firstName = 'Google';
+        if (!lastName) lastName = 'User';
+      }
+
+      // Hash a random password for User model requirements
+      const randomPassword = crypto.randomBytes(32).toString('hex');
+      const hashedPassword = crypto.createHash('sha256').update(randomPassword).digest('hex');
+      
+      user = await db.$transaction(async (tx) => {
+        const newUser = await tx.user.create({
+          data: {
+            email,
+            password: hashedPassword,
+            role: userRole,
+          }
+        });
+        
+        const newStaff = await tx.staff.create({
+          data: {
+            userId: newUser.id,
+            firstName,
+            lastName,
+            role: staffRole,
+            imageUrl,
+            availableDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            isActive: true,
+          }
+        });
+        
+        return {
+          ...newUser,
+          staff: newStaff,
+        };
+      });
     }
     
     // Check if the user is authorized as ADMIN or STAFF
