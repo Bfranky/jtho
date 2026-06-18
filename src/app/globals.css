@@ -97,8 +97,8 @@ body { font-family:'DM Sans',sans-serif; background:var(--white); color:var(--na
 
 /* ── Sidebar nav ── */
 .sidebar-item { display:flex; align-items:center; gap:12px; padding:11px 16px; border-radius:8px; font-size:14px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; text-decoration:none; border:none; background:none; width:100%; }
-.sidebar-item:hover  { background:var(--light); color:var(--navy); }
-.sidebar-item.active { background:rgba(37,99,235,.1); color:var(--sky); font-weight:600; }
+.sidebar-item:hover  { background:rgba(255,255,255,.08); color:#fff; }
+.sidebar-item.active { background:rgba(37,99,235,.15); color:var(--sky-light); font-weight:600; }
 
 /* ── Page header ── */
 .page-hero { background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%); padding:80px 40px 60px; position:relative; overflow:hidden; }
