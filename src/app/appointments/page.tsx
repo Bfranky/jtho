@@ -98,7 +98,7 @@ export default function AppointmentsPage() {
             We will call <strong>{data.phone}</strong> to confirm your visit. Please be available. God bless you!
           </p>
           <div style={{ background: 'var(--light)', border: '1px solid var(--border)', borderRadius: 8, padding: '18px 24px', marginBottom: 24, textAlign: 'left' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div className="form-grid-2col">
               {[
                 ['Appointment ID', ref],
                 ['Service',        data.service],
@@ -137,7 +137,7 @@ export default function AppointmentsPage() {
         </div>
       </div>
 
-      <section style={{ padding: '60px 40px', background: 'var(--cream)' }}>
+      <section className="section-responsive-padding" style={{ background: 'var(--cream)' }}>
         <div style={{ maxWidth: 780, margin: '0 auto' }}>
 
           {/* Step indicator */}
@@ -157,14 +157,14 @@ export default function AppointmentsPage() {
           </div>
 
           {/* Form card */}
-          <div style={{ background: '#fff', border: '1px solid var(--border)', borderTop: '3px solid var(--sky)', borderRadius: 10, padding: '40px' }}>
+          <div className="card-responsive-padding" style={{ background: '#fff', border: '1px solid var(--border)', borderTop: '3px solid var(--sky)', borderRadius: 10 }}>
 
             {/* ── STEP 1: Service ── */}
             {step === 1 && (
               <>
                 <h3 className="serif" style={{ color: 'var(--navy)', fontSize: 26, marginBottom: 8 }}>Select Service</h3>
                 <p style={{ color: 'var(--muted)', fontSize: 14, marginBottom: 28 }}>Choose the treatment or service that best matches your needs.</p>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 32 }}>
+                <div className="form-grid-2col" style={{ marginBottom: 32 }}>
                   {SERVICES.map(svc => (
                     <button key={svc.label} onClick={() => setData(d => ({ ...d, service: svc.label }))}
                       style={{
@@ -215,7 +215,7 @@ export default function AppointmentsPage() {
                 {/* Time slots */}
                 <div style={{ marginBottom: 32 }}>
                   <label className="label" style={{ marginBottom: 12 }}>Available Time Slots</label>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
+                  <div className="responsive-grid-4col" style={{ gap: 10 }}>
                     {TIME_SLOTS.map(slot => (
                       <button
                         key={slot}
@@ -256,7 +256,7 @@ export default function AppointmentsPage() {
               <>
                 <h3 className="serif" style={{ color: 'var(--navy)', fontSize: 26, marginBottom: 8 }}>Your Details</h3>
                 <p style={{ color: 'var(--muted)', fontSize: 14, marginBottom: 28 }}>Please fill in your personal information accurately.</p>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                <div className="form-grid-2col">
                   <div><label className="label">First Name *</label><input className="input" value={data.firstName} onChange={set('firstName')} placeholder="First name" /></div>
                   <div><label className="label">Last Name *</label><input className="input" value={data.lastName} onChange={set('lastName')} placeholder="Last name" /></div>
                   <div><label className="label">Phone Number *</label><input className="input" value={data.phone} onChange={set('phone')} placeholder="0803 000 0000" /></div>
@@ -327,13 +327,6 @@ export default function AppointmentsPage() {
 
       <Footer />
       <WhatsApp />
-      <style>{`
-        @media(max-width:600px){
-          section { padding: 40px 20px !important; }
-          div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
-          div[style*="repeat(4, 1fr)"] { grid-template-columns: repeat(2,1fr) !important; }
-        }
-      `}</style>
     </>
   );
 }

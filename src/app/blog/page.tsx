@@ -143,7 +143,7 @@ export default function BlogListingPage() {
       <Navbar />
 
       {/* Hero Header */}
-      <div className="page-hero" style={{ background: 'linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%)', padding: '80px 40px' }}>
+      <div className="page-hero" style={{ background: 'linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div className="section-label" style={{ color: 'var(--teal-light)' }}>
             Medical Education Hub
@@ -158,7 +158,7 @@ export default function BlogListingPage() {
       </div>
 
       {/* Filters & Search */}
-      <div style={{ background: '#fff', borderBottom: '1px solid var(--border)', padding: '20px 40px' }}>
+      <div className="container-responsive-padding" style={{ background: '#fff', borderBottom: '1px solid var(--border)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center', justifyContent: 'space-between' }}>
           
           {/* Categories */}
@@ -201,7 +201,7 @@ export default function BlogListingPage() {
       </div>
 
       {/* Posts Section */}
-      <section style={{ padding: '60px 40px', background: 'var(--cream)', minHeight: '50vh' }}>
+      <section className="section-responsive-padding" style={{ background: 'var(--cream)', minHeight: '50vh' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           
           {loading ? (
@@ -279,7 +279,7 @@ export default function BlogListingPage() {
       </section>
 
       {/* CTA Section */}
-      <section style={{ padding: '60px 40px', background: 'var(--navy)', color: '#fff', textAlign: 'center' }}>
+      <section className="section-responsive-padding" style={{ background: 'var(--navy)', color: '#fff', textAlign: 'center' }}>
         <div style={{ maxWidth: 800, margin: '0 auto' }}>
           <h2 className="serif" style={{ fontSize: 32, marginBottom: 16 }}>Need Immediate Musculoskeletal Care?</h2>
           <p style={{ color: 'rgba(255,255,255,.7)', fontSize: 15, marginBottom: 24, lineHeight: 1.6 }}>
@@ -294,7 +294,6 @@ export default function BlogListingPage() {
 
       <Footer />
       <WhatsApp />
-      <style>{`@media(max-width:768px){section,div[style*="padding: '20px 40px'"]{padding:20px!important}}`}</style>
     </>
   );
 }

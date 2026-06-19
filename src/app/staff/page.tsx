@@ -693,7 +693,7 @@ export default function StaffPortalPage() {
                       </p>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+                    <div className="form-grid-2col" style={{ marginBottom: 12 }}>
                       <div>
                         <label className="label">First Name *</label>
                         <input
@@ -726,7 +726,7 @@ export default function StaffPortalPage() {
                       />
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 12, marginBottom: 12 }}>
+                    <div className="form-grid-2col" style={{ marginBottom: 12 }}>
                       <div>
                         <label className="label">Role *</label>
                         <select
@@ -753,7 +753,7 @@ export default function StaffPortalPage() {
                       </div>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 12, marginBottom: 12 }}>
+                    <div className="form-grid-2col" style={{ marginBottom: 12 }}>
                       <div>
                         <label className="label">Qualifications</label>
                         <input
@@ -1048,7 +1048,7 @@ export default function StaffPortalPage() {
                     </div>
 
                     <form onSubmit={handleRegisterPatient}>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                      <div className="form-grid-2col">
                         <div>
                           <label className="label">First Name *</label>
                           <input
@@ -1069,7 +1069,7 @@ export default function StaffPortalPage() {
                         </div>
                       </div>
 
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                      <div className="form-grid-2col">
                         <div>
                           <label className="label">Phone Number *</label>
                           <input
@@ -1091,7 +1091,7 @@ export default function StaffPortalPage() {
                         </div>
                       </div>
 
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 0.8fr 1.2fr', gap: 16, marginBottom: 16 }}>
+                      <div className="form-grid-3col">
                         <div>
                           <label className="label">Date of Birth</label>
                           <input
@@ -1143,7 +1143,7 @@ export default function StaffPortalPage() {
                         />
                       </div>
 
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 28 }}>
+                      <div className="form-grid-2col" style={{ marginBottom: 28 }}>
                         <div>
                           <label className="label">Emergency Contact Name</label>
                           <input
@@ -1260,7 +1260,7 @@ export default function StaffPortalPage() {
                         <p style={{ color: 'var(--muted)', fontSize: 12, marginBottom: 20 }}>Document diagnosis, machines or manual massage treatments, and specify clinical outcomes.</p>
 
                         <form onSubmit={handleSaveNote}>
-                          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 16, marginBottom: 16 }}>
+                          <div className="form-grid-2col">
                             <div>
                               <label className="label">Primary Condition / Concern *</label>
                               <input
@@ -1286,7 +1286,7 @@ export default function StaffPortalPage() {
                             </div>
                           </div>
 
-                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                          <div className="form-grid-2col">
                             <div>
                               <label className="label">Diagnosis & Findings</label>
                               <textarea
@@ -1360,7 +1360,7 @@ export default function StaffPortalPage() {
                                   </span>
                                 </div>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 14, background: 'var(--light)', padding: 14, borderRadius: 6 }}>
+                                <div className="form-grid-2col" style={{ marginBottom: 14, background: 'var(--light)', padding: 14, borderRadius: 6 }}>
                                   <div>
                                     <div style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700, letterSpacing: .5 }}>DIAGNOSIS</div>
                                     <div style={{ fontSize: 12, color: 'var(--navy)', marginTop: 3 }}>{n.diagnosis || 'None entered'}</div>
@@ -1402,7 +1402,7 @@ export default function StaffPortalPage() {
                                   <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, marginBottom: 12 }}>
                                     📅 LOGGED: {new Date(v.recordedAt).toLocaleString()}
                                   </div>
-                                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10, marginBottom: 10 }}>
+                                  <div className="responsive-grid-3col" style={{ gap: 10, marginBottom: 10 }}>
                                     {[
                                       { l: 'B.P. (mmHg)', v: v.bloodPressure || 'N/A' },
                                       { l: 'Pulse (bpm)', v: v.pulse || 'N/A' },
@@ -1437,7 +1437,7 @@ export default function StaffPortalPage() {
                               <label className="label">Blood Pressure</label>
                               <input className="input" placeholder="e.g. 120/80" value={newVital.bloodPressure} onChange={(e) => setNewVital(n => ({ ...n, bloodPressure: e.target.value }))} />
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
+                            <div className="form-grid-2col" style={{ gap: 10, marginBottom: 12 }}>
                               <div>
                                 <label className="label">Pulse (bpm)</label>
                                 <input type="number" className="input" placeholder="72" value={newVital.pulse} onChange={(e) => setNewVital(n => ({ ...n, pulse: e.target.value }))} />
@@ -1447,7 +1447,7 @@ export default function StaffPortalPage() {
                                 <input type="number" step="0.1" className="input" placeholder="36.5" value={newVital.temperature} onChange={(e) => setNewVital(n => ({ ...n, temperature: e.target.value }))} />
                               </div>
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
+                            <div className="form-grid-2col" style={{ gap: 10, marginBottom: 12 }}>
                               <div>
                                 <label className="label">Weight (kg)</label>
                                 <input type="number" step="0.1" className="input" placeholder="75" value={newVital.weight} onChange={(e) => setNewVital(n => ({ ...n, weight: e.target.value }))} />

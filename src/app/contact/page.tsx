@@ -30,8 +30,8 @@ export default function ContactPage() {
         </div>
       </div>
 
-      <section style={{ padding:'80px 40px', background:'var(--cream)' }}>
-        <div style={{ maxWidth:1200, margin:'0 auto', display:'grid', gridTemplateColumns:'1fr 1.4fr', gap:60 }}>
+      <section className="section-responsive-padding" style={{ background:'var(--cream)' }}>
+        <div className="contact-grid" style={{ maxWidth:1200, margin:'0 auto' }}>
 
           {/* Info */}
           <div>
@@ -64,7 +64,7 @@ export default function ContactPage() {
           </div>
 
           {/* Form */}
-          <div style={{ background:'#fff', border:'1px solid var(--border)', borderTop:'3px solid var(--sky)', borderRadius:10, padding:'40px' }}>
+          <div className="card-responsive-padding" style={{ background:'#fff', border:'1px solid var(--border)', borderTop:'3px solid var(--sky)', borderRadius:10 }}>
             {sent ? (
               <div style={{ textAlign:'center', padding:'40px 0' }}>
                 <div style={{ fontSize:52, marginBottom:14 }}>✚</div>
@@ -75,7 +75,7 @@ export default function ContactPage() {
               <>
                 <h3 className="serif" style={{ color:'var(--navy)', fontSize:24, marginBottom:6 }}>Send a Message</h3>
                 <p style={{ color:'var(--muted)', fontSize:13, marginBottom:28 }}>We'll get back to you within a few hours.</p>
-                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginBottom:16 }}>
+                <div className="form-grid-2col">
                   <div><label className="label">Full Name *</label><input className="input" value={form.name} onChange={set('name')} placeholder="Your name" /></div>
                   <div><label className="label">Phone *</label><input className="input" value={form.phone} onChange={set('phone')} placeholder="0803 000 0000" /></div>
                 </div>
@@ -114,7 +114,19 @@ export default function ContactPage() {
 
       <Footer />
       <WhatsApp />
-      <style>{`@media(max-width:768px){section>div[style*="1.4fr"]{grid-template-columns:1fr!important;gap:40px!important}} @media(max-width:600px){section{padding:60px 20px!important} div[style*="1fr 1fr"]{grid-template-columns:1fr!important}}`}</style>
+      <style>{`
+        .contact-grid {
+          display: grid !important;
+          grid-template-columns: 1fr 1.4fr;
+          gap: 60px;
+        }
+        @media(max-width: 900px) {
+          .contact-grid {
+            grid-template-columns: 1fr !important;
+            gap: 40px !important;
+          }
+        }
+      `}</style>
     </>
   );
 }

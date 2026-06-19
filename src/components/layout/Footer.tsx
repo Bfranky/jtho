@@ -20,9 +20,9 @@ export default function Footer() {
   return (
     <footer>
 
-      <div style={{ background:'var(--navy)', padding:'60px 40px 28px' }}>
+      <div className="section-responsive-padding" style={{ background:'var(--navy)', padding:'60px 40px 28px' }}>
         <div style={{ maxWidth:1200, margin:'0 auto' }}>
-          <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', gap:48, marginBottom:48 }}>
+          <div className="footer-grid">
 
             {/* Brand */}
             <div>
@@ -82,7 +82,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <style>{`@media(max-width:768px){footer div[style*="2fr 1fr"]{grid-template-columns:1fr 1fr!important}}`}</style>
     </footer>
   );
 }

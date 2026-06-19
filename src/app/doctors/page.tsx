@@ -69,7 +69,7 @@ export default function DoctorsPage() {
       <Navbar />
 
       {/* Hero Header */}
-      <div className="page-hero" style={{ background: 'linear-gradient(135deg, var(--navy), #0F766E)', padding: '80px 40px' }}>
+      <div className="page-hero" style={{ background: 'linear-gradient(135deg, var(--navy), #0F766E)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div className="section-label" style={{ color: 'var(--teal-light)' }}>
             <span style={{ background: 'var(--teal-light)' }} /> Professional Medical Team
@@ -84,7 +84,7 @@ export default function DoctorsPage() {
       </div>
 
       {/* Filters */}
-      <div style={{ background: '#fff', borderBottom: '1px solid var(--border)', padding: '20px 40px' }}>
+      <div className="container-responsive-padding" style={{ background: '#fff', borderBottom: '1px solid var(--border)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center', flex: 1 }}>
             <input className="input" placeholder="🔍 Search name or specialty..." value={search} onChange={e => setSearch(e.target.value)} style={{ maxWidth: 280 }} />
@@ -115,7 +115,7 @@ export default function DoctorsPage() {
       </div>
 
       {/* Team grid */}
-      <section style={{ padding: '60px 40px', background: 'var(--cream)' }}>
+      <section className="section-responsive-padding" style={{ background: 'var(--cream)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           
           {loading ? (
@@ -212,7 +212,6 @@ export default function DoctorsPage() {
 
       <Footer />
       <WhatsApp />
-      <style>{`@media(max-width:600px){section,div[style*="padding: '20px 40px'"]{padding:20px!important}}`}</style>
     </>
   );
 }

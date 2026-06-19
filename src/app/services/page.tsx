@@ -93,7 +93,7 @@ export default function ServicesPage() {
       <Navbar />
 
       {/* Page hero */}
-      <div className="page-hero" style={{ background: 'linear-gradient(135deg, var(--navy), #1E3A8A)', padding: '80px 40px' }}>
+      <div className="page-hero" style={{ background: 'linear-gradient(135deg, var(--navy), #1E3A8A)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div className="section-label" style={{ color: 'var(--teal-light)' }}>
             <span style={{ background: 'var(--teal-light)' }} />
@@ -109,7 +109,7 @@ export default function ServicesPage() {
       </div>
 
       {/* Service grid */}
-      <section style={{ padding: '80px 40px', background: 'var(--cream)' }}>
+      <section className="section-responsive-padding" style={{ background: 'var(--cream)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: 24 }}>
             {SERVICES.map((s) => (
@@ -176,7 +176,6 @@ export default function ServicesPage() {
 
       <Footer />
       <WhatsApp />
-      <style>{`@media(max-width:600px){section{padding:60px 20px!important}}`}</style>
     </>
   );
 }

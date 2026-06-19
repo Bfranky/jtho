@@ -179,7 +179,7 @@ export default function PortalPage() {
             <div>🔄 Loading your medical history...</div>
           </div>
         ) : (
-          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '40px', display: 'grid', gridTemplateColumns: '240px 1fr', gap: 28 }} className="portal-grid">
+          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '240px 1fr', gap: 28 }} className="portal-grid container-responsive-padding">
             {/* Sidebar */}
             <div>
               {/* Patient card */}

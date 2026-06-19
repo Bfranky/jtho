@@ -51,7 +51,7 @@ export default function HomePage() {
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(105deg,rgba(10,22,40,.97) 45%, rgba(10,22,40,.65) 100%)' }} />
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,rgba(255,255,255,.03) 1px,transparent 0)', backgroundSize: '32px 32px' }} />
 
-        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1200, margin: '0 auto', padding: '120px 40px 80px', width: '100%' }}>
+        <div className="container-responsive-padding" style={{ position: 'relative', zIndex: 2, maxWidth: 1200, margin: '0 auto', paddingTop: 120, paddingBottom: 80, width: '100%' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }} className="hero-grid">
             <div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(13,148,136,.15)', border: '1px solid rgba(13,148,136,.3)', padding: '7px 16px', borderRadius: 40, marginBottom: 28 }}>
@@ -107,7 +107,7 @@ export default function HomePage() {
       </section>
 
       {/* ── CLINICAL SERVICES GRID ── */}
-      <section id="quick-services" style={{ padding: '80px 40px', background: 'var(--cream)' }}>
+      <section id="quick-services" className="section-responsive-padding" style={{ background: 'var(--cream)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 52 }}>
             <div className="section-label" style={{ justifyContent: 'center' }}>Clinical Services Overview</div>
@@ -129,7 +129,7 @@ export default function HomePage() {
       </section>
 
       {/* ── DIRECTORY SEARCH & STAFF WORKSPACE ── */}
-      <section style={{ padding: '80px 40px', background: '#fff' }}>
+      <section className="section-responsive-padding" style={{ background: '#fff' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }} className="hero-grid">
           <div>
             <div className="section-label">Medical Specialists</div>
@@ -163,7 +163,7 @@ export default function HomePage() {
       </section>
 
       {/* ── WHY CHOOSE JESUS THE HEALER ── */}
-      <section style={{ padding: '80px 40px', background: 'var(--navy)', position: 'relative', overflow: 'hidden' }}>
+      <section className="section-responsive-padding" style={{ background: 'var(--navy)', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', right: '-3%', top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,.025)', fontSize: 400, lineHeight: 1, userSelect: 'none' }}>✚</div>
         <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative' }}>
           <div style={{ textAlign: 'center', marginBottom: 52 }}>
@@ -187,7 +187,7 @@ export default function HomePage() {
       </section>
 
       {/* ── PATIENT STORIES ── */}
-      <section style={{ padding: '80px 40px', background: 'var(--cream)' }}>
+      <section className="section-responsive-padding" style={{ background: 'var(--cream)' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 52 }}>
             <div className="section-label" style={{ justifyContent: 'center' }}>Patient Stories</div>

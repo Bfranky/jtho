@@ -224,7 +224,7 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
         <article style={{ maxWidth: 840, margin: '0 auto', background: '#fff', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 20px rgba(10,22,40,.02)' }}>
           
           {/* Cover image banner */}
-          <div style={{ height: 400, position: 'relative', overflow: 'hidden', background: 'var(--navy)' }}>
+          <div className="post-hero-container" style={{ height: 400, position: 'relative', overflow: 'hidden', background: 'var(--navy)' }}>
             <img
               src={post.imageUrl || 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80'}
               alt={post.title}
@@ -233,7 +233,7 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,22,40,.8) 0%, rgba(10,22,40,.2) 70%, transparent 100%)' }} />
             
             {/* Overlay Header */}
-            <div style={{ position: 'absolute', bottom: 32, left: 32, right: 32 }}>
+            <div className="post-banner-header" style={{ position: 'absolute', bottom: 32, left: 32, right: 32 }}>
               <span className={`badge ${getCategoryBadgeClass(post.category)}`} style={{ background: '#fff', marginBottom: 12, boxShadow: '0 2px 8px rgba(0,0,0,.15)' }}>
                 {CATEGORY_LABELS[post.category] || post.category}
               </span>
@@ -257,7 +257,7 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
           </div>
 
           {/* Post Body */}
-          <div style={{ padding: '40px 48px' }}>
+          <div className="card-responsive-padding">
             <p style={{ color: 'var(--muted)', fontSize: 16, lineHeight: 1.8, marginBottom: 24, fontStyle: 'italic', borderLeft: '4px solid var(--border)', paddingLeft: '16px' }}>
               {post.summary}
             </p>
@@ -282,6 +282,18 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
 
       <Footer />
       <WhatsApp />
+      <style>{`
+        @media(max-width: 600px) {
+          .post-hero-container {
+            height: 300px !important;
+          }
+          .post-banner-header {
+            bottom: 16px !important;
+            left: 16px !important;
+            right: 16px !important;
+          }
+        }
+      `}</style>
     </>
   );
 }

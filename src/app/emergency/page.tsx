@@ -46,7 +46,7 @@ export default function EmergencyPage() {
       <Navbar />
 
       {/* 24HR SUPPORT HERO — red */}
-      <section style={{ background: 'linear-gradient(135deg, #111827, #0F766E)', padding: '80px 40px 60px', position: 'relative', overflow: 'hidden' }}>
+      <section className="section-responsive-padding" style={{ background: 'linear-gradient(135deg, #111827, #0F766E)', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 0)', backgroundSize: '32px 32px' }} />
         <div style={{ position: 'absolute', right: '-3%', top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,.03)', fontSize: 400, lineHeight: 1 }}>🏡</div>
         <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 2 }}>
@@ -71,10 +71,10 @@ export default function EmergencyPage() {
       </section>
 
       {/* Quick Actions */}
-      <section style={{ padding: '60px 40px', background: '#fff' }}>
+      <section className="section-responsive-padding" style={{ background: '#fff' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <h2 className="serif" style={{ color: 'var(--navy)', fontSize: 32, textAlign: 'center', marginBottom: 40 }}>Direct Access Points</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }} className="quick-actions-grid">
+          <div className="responsive-grid-3col" style={{ gap: 20 }}>
             {[
               { icon: '📞', title: '24hr Call Center', desc: 'Direct line to our Ojodu emergency and clinical support desk — staffed 24 hours a day, 7 days a week.', action: 'Call 08023758036', href: 'tel:08023758036', color: 'var(--sky)' },
               { icon: '💬', title: 'WhatsApp Home Service', desc: 'Instantly send your home location and treatment requirements to our clinical mobilizers.', action: 'WhatsApp Request', href: 'https://wa.me/2348023758036?text=HOME%20SERVICE%20REQUEST', color: '#25D366' },
@@ -95,13 +95,13 @@ export default function EmergencyPage() {
       </section>
 
       {/* Home visit request form */}
-      <section style={{ padding: '60px 40px', background: 'var(--cream)' }}>
+      <section className="section-responsive-padding" style={{ background: 'var(--cream)' }}>
         <div style={{ maxWidth: 700, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 40 }}>
             <h2 className="serif" style={{ color: 'var(--navy)', fontSize: 32, marginBottom: 8 }}>Request 24hr Home Service</h2>
             <p style={{ color: 'var(--muted)', fontSize: 14 }}>Fill out this form to request specialized clinical massage, physiotherapy, or fracture visits to your home.</p>
           </div>
-          <div style={{ background: '#fff', border: '2px solid var(--teal)', borderRadius: 10, padding: '36px 40px' }}>
+          <div className="card-responsive-padding" style={{ background: '#fff', border: '2px solid var(--teal)', borderRadius: 10 }}>
             {sent ? (
               <div style={{ textAlign: 'center', padding: '32px 0' }}>
                 <div style={{ fontSize: 52, marginBottom: 14 }}>✨</div>
@@ -112,7 +112,7 @@ export default function EmergencyPage() {
               </div>
             ) : (
               <form onSubmit={submit}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                <div className="form-grid-2col">
                   <div>
                     <label className="label">Patient Name *</label>
                     <input required className="input" value={form.name} onChange={set('name')} placeholder="Full name" />
@@ -123,7 +123,7 @@ export default function EmergencyPage() {
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 16, marginBottom: 16 }}>
+                <div className="form-grid-2col">
                   <div>
                     <label className="label">Home Service Address *</label>
                     <input required className="input" value={form.location} onChange={set('location')} placeholder="Street, building, landmark in Lagos" />
@@ -161,10 +161,10 @@ export default function EmergencyPage() {
       </section>
 
       {/* Safety Guideline */}
-      <section style={{ padding: '60px 40px', background: '#fff' }}>
+      <section className="section-responsive-padding" style={{ background: '#fff' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <h2 className="serif" style={{ color: 'var(--navy)', fontSize: 30, textAlign: 'center', marginBottom: 36 }}>Musculoskeletal Support Guidelines</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="guidelines-grid">
+          <div className="responsive-grid-2col" style={{ gap: 16 }}>
             {[
               { icon: '🚫', title: 'Immobilize Joint and Bone Fractures', desc: 'Avoid shifting or adjusting bone fractures or dislocated limbs. Keep them supported in one place to prevent nerve or artery injury.' },
               { icon: '🧊', title: 'Apply Cold Compress', desc: 'Wrap ice in a cloth and place it on swollen joints (especially in severe arthritis or ligament sprains). Do not put ice directly on the bare skin.' },
@@ -186,14 +186,6 @@ export default function EmergencyPage() {
       </section>
 
       <Footer />
-      <style>{`
-        @media(max-width:768px){
-          section{padding:40px 20px!important}
-          .quick-actions-grid, .guidelines-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </>
   );
 }

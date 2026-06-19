@@ -27,6 +27,7 @@ export default function AdminPage() {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showStaffPassword, setShowStaffPassword] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Database lists
   const [patients, setPatients] = useState<any[]>([]);
@@ -533,8 +534,15 @@ export default function AdminPage() {
   return (
     <>
       {/* Top bar */}
-      <div style={{ background: 'var(--navy)', padding: '12px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="admin-topbar">
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <button
+            className="admin-hamburger"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            aria-label="Toggle sidebar"
+          >
+            {sidebarOpen ? '✕' : '☰'}
+          </button>
           <div style={{ width: 32, height: 32, background: 'var(--sky)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 16 }}>✚</div>
           <div>
             <div style={{ fontFamily: 'DM Serif Display,serif', color: '#fff', fontSize: 14 }}>Jesus The Healer</div>
@@ -542,14 +550,16 @@ export default function AdminPage() {
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <span style={{ color: 'rgba(255,255,255,.5)', fontSize: 13 }}>{session?.email}</span>
+          <span className="admin-email-label" style={{ color: 'rgba(255,255,255,.5)', fontSize: 13 }}>{session?.email}</span>
           <button onClick={handleSignOut} style={{ background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.15)', color: '#fff', padding: '6px 14px', borderRadius: 6, fontSize: 12, cursor: 'pointer' }}>Sign Out</button>
         </div>
       </div>
 
-      <div style={{ display: 'flex', minHeight: 'calc(100vh - 54px)' }}>
+      <div className="admin-layout">
+        {/* Sidebar overlay for mobile */}
+        {sidebarOpen && <div className="admin-sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
         {/* Sidebar */}
-        <div style={{ width: 220, background: 'var(--navy)', padding: '20px 12px', flexShrink: 0 }}>
+        <div className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
           {[
             { key: 'overview',     label: 'Overview',      icon: '📊' },
             { key: 'patients',     label: 'Patients',      icon: '👥' },
@@ -558,7 +568,7 @@ export default function AdminPage() {
             { key: 'records',      label: 'Records',       icon: '📋' },
             { key: 'messages',     label: 'Messages',      icon: '💬' },
           ].map(t => (
-            <button key={t.key} onClick={() => { setTab(t.key as AdminTab); setSearch(''); }}
+            <button key={t.key} onClick={() => { setTab(t.key as AdminTab); setSearch(''); setSidebarOpen(false); }}
               className={`sidebar-item ${tab === t.key ? 'active' : ''}`}
               style={{ color: tab === t.key ? 'var(--sky-light)' : 'rgba(255,255,255,.45)', marginBottom: 2 }}>
               <span>{t.icon}</span> {t.label}
@@ -577,7 +587,7 @@ export default function AdminPage() {
         </div>
 
         {/* Main Content */}
-        <div style={{ flex: 1, background: 'var(--cream)', padding: '32px 40px', overflowY: 'auto' }}>
+        <div className="admin-content">
           {loadingData ? (
             <div style={{ textAlign: 'center', padding: '100px', color: 'var(--muted)' }}>
               <div style={{ fontSize: 24, marginBottom: 8 }}>🔄</div>
@@ -591,7 +601,7 @@ export default function AdminPage() {
                   <h2 className="serif" style={{ color: 'var(--navy)', fontSize: 28, marginBottom: 6 }}>Dashboard Overview</h2>
                   <p style={{ color: 'var(--muted)', fontSize: 13, marginBottom: 28 }}>System Active (Database Connected)</p>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, marginBottom: 28 }}>
+                  <div className="admin-stat-grid">
                     {[
                       { icon: '👥', label: 'Total Patients',       val: patients.length,     sub: 'Real patient count',          color: 'var(--sky)'  },
                       { icon: '📅', label: 'Scheduled Appointments', val: appointments.length, sub: 'Total booked visits',       color: 'var(--teal)' },
@@ -609,7 +619,7 @@ export default function AdminPage() {
                     ))}
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 20 }}>
+                  <div className="admin-overview-grid">
                     <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden' }}>
                       <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div style={{ fontWeight: 700, color: 'var(--navy)', fontSize: 15 }}>Recent Appointments</div>
